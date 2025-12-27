@@ -1,0 +1,18 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  docker-build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build test stage (runs pytest)
+        run: docker build --target test -t devops-projekt-test .
+
+      - name: Build final image
+        run: docker build --target final -t devops-projekt-final .
