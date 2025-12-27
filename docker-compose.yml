@@ -31,6 +31,7 @@ services:
       DATABASE_URL: postgresql://postgres:password@db:5432/appdb
     depends_on:
       - db
+      - seed_runner
 
   nginx:
     image: nginx:alpine
@@ -43,3 +44,16 @@ services:
       - nginx_logs:/var/log/nginx
     networks:
       - front_net
+
+  seed_runner:
+    build:
+      context: .
+      target: final
+    command: ["python", "seed/run_seed.py"]
+    volumes:
+      - seed_output:/seed_output
+    depends_on:
+      - db
+    networks:
+      - back_net
+    restart: "no"
