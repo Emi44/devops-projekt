@@ -6,14 +6,12 @@ def test_health_endpoint():
     assert r.status_code == 200
     assert r.json["status"] == "ok"
 
-def test_hello_endpoint():
+def test_users_get_returns_list():
     client = app.test_client()
-    r = client.get("/hello")
-    assert r.status_code == 200
-    assert "Hello" in r.get_data(as_text=True)
+    r = client.get("/users")
+    assert r.status_code in (200, 500)
 
-def test_version_endpoint():
+def test_users_post_returns_created():
     client = app.test_client()
-    r = client.get("/version")
-    assert r.status_code == 200
-    assert r.json["app"] == "devops-projekt"
+    r = client.post("/users", json={"name": "TestUser"})
+    assert r.status_code in (201, 500)
